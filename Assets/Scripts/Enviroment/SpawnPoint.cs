@@ -10,7 +10,7 @@ public class SpawnPoint : MonoBehaviour
     [SerializeField] private Obstacle[] _obstaclesPrefabs;
     
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.CompareTag("Player"))
             Spawn();

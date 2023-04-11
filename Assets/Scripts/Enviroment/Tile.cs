@@ -8,6 +8,8 @@ public class Tile : MonoBehaviour
     private void Start()
     {
         SetSpawner(transform.parent.GetComponent<TileManager>());
+        var scale = transform.GetChild(0).transform.localScale;
+        transform.GetChild(0).transform.localScale = new Vector3(length, scale.y, scale.z);
     }
 
     public void SetSpawner(TileManager manager)
@@ -15,9 +17,12 @@ public class Tile : MonoBehaviour
         _manager = manager;
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnTriggerEnter(Collider col)
     {
-        if(col.CompareTag("Player"))
-            _manager.Spawn(1,this);
+        if (col.CompareTag("Player"))
+        {
+            _manager.Spawn(1, this);
+            Destroy(this);
+        }
     }
 }

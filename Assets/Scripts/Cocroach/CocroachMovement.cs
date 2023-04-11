@@ -1,48 +1,45 @@
-using System.Collections.Generic;
-using UnityEngine.InputSystem;
+using System;
 using UnityEngine;
 
 public class CocroachMovement : MonoBehaviour
 {
-    private Dictionary<States, ICocroachBehaviour> _cocroachBehaviours = new Dictionary<States, ICocroachBehaviour>();
-    private States curentBehaviour;
+    private float curJumpTime = 0;
+    private const float maxJumpTime = 0.3f;
 
-    public enum States 
-    {
-        Idle,
-        Run,
-        Jump
-    }  
-    
+    private float moveSpeed = 10;
+    private float jumpForce = 70;
+
+    private Rigidbody rb;
+
+    private bool isJumping;
+
     private void Start()
     {
-        PlayerInput playerInput = GetComponent<PlayerInput>();
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        
-        _cocroachBehaviours[States.Idle] = new CocroachBehaviourIdle();
-        _cocroachBehaviours[States.Run] = new CocroachBehaviourRun();
-        _cocroachBehaviours[States.Jump] = new CocroachBehaviourJump();
-        Debug.Log(GetComponent<PlayerInput>());
-        _cocroachBehaviours[States.Idle].Init(this);
-        _cocroachBehaviours[States.Run].Init(this);
-        _cocroachBehaviours[States.Jump].Init(this);
-        
-
-        curentBehaviour = States.Run;
+        rb = GetComponent<Rigidbody>();
     }
 
-    void Update()
+    public void Move(Vector3 moveVec)
     {
-        _cocroachBehaviours[curentBehaviour].Update();
-        Debug.Log(curentBehaviour);
-    }
 
-    public void SetBehaviour(States behaviorType)
-    {
-        if(behaviorType == curentBehaviour) return;
-        _cocroachBehaviours[curentBehaviour].Exit();
-        curentBehaviour = behaviorType;
-        _cocroachBehaviours[curentBehaviour].Enter();
-        
+        if (FloorChecker.CheckFloor(transform.position))
+        {
+            curJumpTime = 0;
+            isJumping = false;
+        }
+        if(  (isJumping&& curJumpTime < maxJumpTime) || FloorChecker.CheckFloor(transform.position) )
+        {
+            isJumping = true;
+            curJumpTime += Time.deltaTime;
+        }
+        else
+        {
+            moveVec.y = 0;
+        }
+
+
+        rb.AddForce(new Vector2(0, moveVec.y * jumpForce * Time.deltaTime), ForceMode.Impulse);
+        moveVec.y = rb.velocity.y;
+        moveVec.x *= moveSpeed;
+        rb.velocity = moveVec;
     }
 }

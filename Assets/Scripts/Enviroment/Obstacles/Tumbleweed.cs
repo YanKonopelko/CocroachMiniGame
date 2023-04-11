@@ -5,13 +5,13 @@ public class Tumbleweed : Obstacle
     private Transform _transform;
     [SerializeField] private float rotationSpeed = -50;
     [SerializeField] private float movementSpeed = -50;
-    private Rigidbody2D rb;
+    private Rigidbody rb;
     [SerializeField] private float size = 1;
     private void OnEnable()
     {
         _transform = transform;
-        rb = GetComponent<Rigidbody2D>();
-        transform.localScale = new Vector3(size,size,1);
+        rb = GetComponent<Rigidbody>();
+        transform.localScale = new Vector3(size,size,size);
     }
 
 

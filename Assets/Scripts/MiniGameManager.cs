@@ -30,7 +30,8 @@ public class MiniGameManager : MonoBehaviour
         Instantiate(MiniGamePrefab,transform);
         onGameCreate?.Invoke();
         Debug.Log("GameCreated");
-        
+        Physics.gravity = new Vector3(0, -18, 0);
+
         StartGame();
     }
 
@@ -49,6 +50,7 @@ public class MiniGameManager : MonoBehaviour
     }
     public void DestroyGame()
     {
+        Physics.gravity = new Vector3(0, -9.8f, 0);
         onGameDestroy?.Invoke();
         foreach (Transform childTransform in transform) Destroy(childTransform.gameObject);
         Debug.Log("GameDestroyed");

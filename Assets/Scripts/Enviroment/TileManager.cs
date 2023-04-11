@@ -26,16 +26,18 @@ public class TileManager : MonoBehaviour
     {
         Vector2 spawnPoint = curTile.transform.position;
         spawnPoint += new Vector2(curTile.length/2 + _tilePrefabs[num].length/2 ,0);
+        
         var newTile = Instantiate(_tilePrefabs[num],spawnPoint,Quaternion.identity);
         newTile.transform.parent = transform;
         newTile.SetSpawner(this);
+        
         AddTile(newTile);
-
+        
         if(spawnedTiles.Count>7)
             RemoveFirstTile();
     }
 
-    public void AddTile(Tile tile)
+    private void AddTile(Tile tile)
     {
         spawnedTiles.Add(tile);
     }
